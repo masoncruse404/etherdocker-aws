@@ -185,7 +185,55 @@ def getcontextstar(request):
     con = {"storagevalue":storagevalue,"email":email,"firstinitial":firstinitial,"name":name,"me":me,"storagemb":storagemb,"image_list":image_list,  'folder_list':folder_list, 'storage':storage, 'all_folder_list':all_folder_list}
     return con
 
+@login_required(login_url='/users/login/')
+def deleteuserdata(request):
+    user = request.user
+    pro = Profile.objects.get(user=user)
+    if pro.gid != 0:
+        g = Folder.objects.get(id=pro.gid)
+        print('g path ',g.path)
+    storagevalue = pro.storage
+    email = user.email
+    uid = user.id
+    cuser = User.objects.get(id=uid)  
+    name = cuser.firstname + ' ' + cuser.lastname
+    firstinitial = cuser.firstname[0]
+    firstinitial = firstinitial.upper()
+    storage = getstorage(pro)
+    storagemb = getstoragemb(pro)
+    image_list = File.objects.filter(owner=pro)
+    today_list = []
+    week_list = []
+    month_list = []
+    year_list = []
+    sep = ' '
+    today = datetime.now()
+    week = datetime.now() - timedelta(days=7)
+    month = datetime.now() - timedelta(days=28)
+    year = datetime.now() - timedelta(days=365)
+    today = pytz.utc.localize(today)
+    todaysplit = str(today).split()
+    week = pytz.utc.localize(week)
+    month = pytz.utc.localize(month)
+    year = pytz.utc.localize(year)
+    for image in image_list:
+        rest = image.modified
+        restsplit = str(rest).split()
+        #rest = pytz.utc.localize(rest)
+        if rest < year:
+            year_list.append(image)
+        elif rest <= month:
+            month_list.append(image)
+        elif rest <= week:
+            week_list.append(image)
+        elif str(restsplit[0]) ==  str(todaysplit[0]):
+            today_list.append(image)
 
+
+    context = {"storagevalue":storagevalue,"email":email,"firstinitial":firstinitial,"name":name,"today_list":today_list, 'week_list':week_list, 'month_list':month_list, 'year_list':year_list, "storage":storage,"storagemb":storagemb}
+
+
+    return render(request, 'uploads/recent.html', context)
 
 @login_required(login_url='/users/login/')
 def recent(request):

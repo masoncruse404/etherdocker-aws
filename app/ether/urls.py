@@ -30,6 +30,7 @@ urlpatterns = [
     path('rootfolder/', upload_views.rootfolder, name='rootfolder'),
     path('sharedwithme/', upload_views.sharedwithme, name='sharedwithme'),
     path('trash/', upload_views.mydrivetrash, name='trash'),
+    path('deleteuserdata/', upload_views.deleteuserdata, name='deleteuserdata'),
     path('starred/', upload_views.allStarred, name='starred'),
     path('makesubfolder/', upload_views.makesubfolder, name='makesubfolder'),
     path('subfolder/<int:pk>/', upload_views.subfolder, name='subfolder'),

@@ -193,7 +193,7 @@ $(document).on("mouseleave", ".fufilewrapper", function() {
        $(newfile).appendTo(".flexbox");
        var baseURL = "{% static 'images/question-icon.png' %}";
        var imgclass = '.' + pcounter;
-       $(imgclass).attr('src', '/static/images/question-icon3.png');
+       $(imgclass).attr('src', '/staticfiles/images/question-icon3.png');
         
       
     }
